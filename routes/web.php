@@ -9,11 +9,14 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
-Route::get('/take-quiz', [QuizController::class, 'takeQuiz'])->middleware('auth')->name('take-quiz');
-Route::get('/dashboard/create-quiz', [DashboardController::class, 'create'])->middleware('auth')->name('create-quiz');
+Route::get('/take-quiz', [QuizController::class, 'take'])->middleware('auth')->name('take-quiz');
+
+Route::get('/create-quiz', [DashboardController::class, 'createQuiz'])->middleware('auth')->name('create-quiz');
+Route::get('/home', [DashboardController::class, 'dashboard'])->middleware('auth')->name('dashboard');
+Route::get('/statistics', [DashboardController::class, 'statistics'])->middleware('auth')->name('statistics');
+Route::get('/quizzes', [DashboardController::class, 'quizzes'])->middleware('auth')->name('quizzes');
 
 
-Route::get('/quiz', function () {return view('dashboard');})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

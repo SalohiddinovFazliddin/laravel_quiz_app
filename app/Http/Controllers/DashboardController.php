@@ -6,10 +6,16 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index(){
-        return('dashboard');
-    }
-    public function create(){
-        return('dashboard.create-quiz');
+public function createQuiz(){
+    return view('dashboard.create-quiz');
+}
+public function dashboard(){
+    return view('dashboard.home');
+}
+public function statistics(){
+    return view('dashboard.statistics');
+}
+public function quizzes(){
+    return view('dashboard.quizzes');
 }
 }
