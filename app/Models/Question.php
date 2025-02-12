@@ -9,7 +9,9 @@ class Question extends Model
     protected $fillable=[
 
         'quiz_id',
-        'name'
-
+        'name',
     ];
+    public function options(){
+        return $this->hasMany(Option::class);
+    }
 }

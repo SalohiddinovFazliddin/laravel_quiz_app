@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -15,7 +16,5 @@ public function dashboard(){
 public function statistics(){
     return view('dashboard.statistics');
 }
-public function quizzes(){
-    return view('dashboard.quizzes');
-}
+
 }
