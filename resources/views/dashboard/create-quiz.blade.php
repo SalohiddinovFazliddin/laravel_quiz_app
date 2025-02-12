@@ -1,4 +1,5 @@
 <x-header></x-header>
+<script src="@vite('resources/js/add-quiz.js')"></script>
 <body class="bg-gray-100">
 <div class="flex min-h-screen">
     <!-- Sidebar -->
