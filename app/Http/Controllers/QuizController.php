@@ -34,7 +34,7 @@ class QuizController extends Controller
     public function store(Request $request)
     {
         $validator = $request->validate([
-            'title' => 'required|string,max:255',
+            'title' => 'required|string',
             'description' => 'required|string',
             'timeLimit' => 'required|integer',
             'questions' => 'required|array',
@@ -45,7 +45,7 @@ class QuizController extends Controller
            'title'=>$validator['title'],
            'description'=>$validator['description'],
            'time_limit'=>$validator['timeLimit'],
-           'slug'=>Str::slug(  date('Y-m-d'). '/' .$request['title']),
+           'slug'=>Str::slug(  strtotime('now') .'/' .$request['title']),
        ]);
        foreach ($validator['questions'] as $question) {
             $questionItem = $quiz->questions()->create([
@@ -54,7 +54,7 @@ class QuizController extends Controller
             foreach ($question['options'] as $optionKey => $option) {
                 $questionItem->options()->create([
                     'name' => $option,
-                    'is_correct' => $question['is_correct']== $optionKey ? 1 : 0,
+                    'is_correct' => $question['correct']== $optionKey ? 1 : 0,
                 ]);
             }
        }
@@ -72,7 +72,7 @@ class QuizController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $quiz)
+    public function edit(Quiz $quiz)
     {
 
         return view('dashboard.edit-quiz',[
@@ -108,7 +108,7 @@ class QuizController extends Controller
         foreach ($question['options'] as $optionKey => $option) {
             $questionItem->options()->create([
                 'name' => $option,
-                'is_correct' => $question['is_correct']== $optionKey ? 1 : 0,
+                'is_correct' => $question['correct']== $optionKey ? 1 : 0,
             ]);
         }
 }

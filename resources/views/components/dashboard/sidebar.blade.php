@@ -8,7 +8,7 @@
         </div>
     </div>
     <nav class="flex-grow p-4">
-        <a href="{{ route('dashboard') }}" class="block p-3 mb-2 text-gray-800 {{ Route::is('dashboard.home') ? 'bg-gray-100' : 'hover:bg-gray-100' }} rounded-lg">
+        <a href="{{ route('home') }}" class="block p-3 mb-2 text-gray-800 {{ Route::is('dashboard.home') ? 'bg-gray-100' : 'hover:bg-gray-100' }} rounded-lg">
             <i class="fas fa-home mr-2"></i> Dashboard
         </a>
         <a href="{{ route('quizzes') }}" class="block p-3 mb-2 text-gray-600 {{ Route::is('dashboard.quizzes') ? 'bg-gray-100' : 'hover:bg-gray-100' }} rounded-lg">

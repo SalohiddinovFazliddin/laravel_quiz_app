@@ -77,12 +77,12 @@
                             <span class="text-sm text-gray-500">75% Completion Rate</span>
                         </div>
                         <div class="flex justify-between">
-                            <button class="text-indigo-600 hover:text-indigo-800">Edit</button>
-                            <button class="text-green-600 hover:text-green-800">View Results</button>
-                            <button
+                            <a class="text-indigo-600 hover:text-indigo-800" href="{{route('edit.quiz', ['quiz' => $quiz->id])}}">Edit</a>
+                            <a class="text-green-600 hover:text-green-800">View Results</a>
+                            <a
                                 class="text-green-600 hover:text-green-100 rounded p-1 hover:bg-blue-500"
                                 onclick="share('{{$quiz->slug}}')"
-                            >Share</button>
+                            >Share</a>
                             <button class="text-red-600 hover:text-red-800">Delete</button>
                         </div>
                     </div>
