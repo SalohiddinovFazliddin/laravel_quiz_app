@@ -18,6 +18,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/quizzes', [QuizController::class, 'index'])->middleware('auth')->name('quizzes');
     Route::get('/quizzes/{quiz}', [QuizController::class, 'edit'])->middleware('auth')->name('edit.quiz');
     Route::post('/quizzes/{quiz}/update', [QuizController::class, 'update'])->middleware('auth')->name('update.quiz');
+    Route::post('/quizzes/{quiz}/destroy', [QuizController::class, 'destroy'])->middleware('auth')->name('destroy.quiz');
 
     Route::get('/create-quiz', [QuizController::class, 'create'])->middleware('auth')->name('create-quiz');
     Route::get('/create-quiz', [QuizController::class, 'store'])->middleware('auth')->name('store-quiz');
@@ -26,10 +27,10 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+//Route::middleware('auth')->group(function () {
+//    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//});
 
 require __DIR__.'/auth.php';

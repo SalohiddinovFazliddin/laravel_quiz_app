@@ -120,6 +120,8 @@ class QuizController extends Controller
      */
     public function destroy(Quiz $quiz)
     {
-
+        $quiz->delete();
+        return redirect()->route('quizzes')->with('success', 'Quiz muvaffaqiyatli o‘chirildi.');
     }
+
 }
