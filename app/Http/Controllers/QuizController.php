@@ -15,7 +15,7 @@ class QuizController extends Controller
     public function index()
     {
         return view('dashboard.quizzes',
-            ['quizzes' => Quiz::withCount('questions')->get()
+            ['quizzes' => Quiz::withCount('questions')->orderBy('id', 'desc')->get()
             ]);
     }
 
@@ -86,7 +86,7 @@ class QuizController extends Controller
     public function update(Request $request, Quiz $quiz)
     {
      $validator = $request->validate([
-         'title' => 'required|string,max:255',
+         'title' => 'required|string',
          'description' => 'required|string',
          'timeLimit' => 'required|integer',
          'questions' => 'required|array',
@@ -121,7 +121,7 @@ class QuizController extends Controller
     public function destroy(Quiz $quiz)
     {
         $quiz->delete();
-        return redirect()->route('quizzes')->with('success', 'Quiz muvaffaqiyatli o‘chirildi.');
+        return to_route('quizzes');
     }
 
 }

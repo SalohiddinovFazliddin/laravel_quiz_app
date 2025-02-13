@@ -18,7 +18,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/quizzes', [QuizController::class, 'index'])->middleware('auth')->name('quizzes');
     Route::get('/quizzes/{quiz}', [QuizController::class, 'edit'])->middleware('auth')->name('edit.quiz');
     Route::post('/quizzes/{quiz}/update', [QuizController::class, 'update'])->middleware('auth')->name('update.quiz');
-    Route::post('/destroy', [QuizController::class, 'destroy'])->middleware('auth')->name('destroy.quiz');
+    Route::get('/quizzes/{quiz}/destroy', [QuizController::class, 'destroy'])->middleware('auth')->name('destroy.quiz');
     Route::get('/create-quiz', [QuizController::class, 'create'])->middleware('auth')->name('create.quiz');
 
     Route::post('/create-quiz', [QuizController::class, 'store'])->middleware('auth')->name('create-quiz');
