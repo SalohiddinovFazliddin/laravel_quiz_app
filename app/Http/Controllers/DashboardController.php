@@ -17,4 +17,6 @@ public function statistics(){
     return view('dashboard.statistics');
 }
 
+
+
 }

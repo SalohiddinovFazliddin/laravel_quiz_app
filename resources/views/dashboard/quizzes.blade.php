@@ -90,18 +90,34 @@
                     </div>
                 @endforeach
             </div>
+
         </main>
+        <div class="mt-4 flex justify-center">
+            {{ $quizzes->onEachSide(1)->links('vendor.pagination.simple-tailwind') }}
+        </div>
+
+
     </div>
     <script>
         async function share(slug) {
             try {
-                slug = '{{env('APP_URL')}}' + '/take-quiz/' + slug;
+                slug = '{{ url('/start-quiz/') }}/' + slug;
                 await navigator.clipboard.writeText(slug);
-                alert('Content copied to clipboard');
-            }catch (err) {
-                console.error('Failed to copy:', err);
+                // Brauzer Notification
+                if (Notification.permission === "granted") {
+                    new Notification("Success", { body: "Content copied to clipboard" });
+                } else if (Notification.permission !== "denied") {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            new Notification("Success", { body: "Content copied to clipboard" });
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to copy: ", err);
             }
         }
+
     </script>
 </div>
 <x-footer></x-footer>

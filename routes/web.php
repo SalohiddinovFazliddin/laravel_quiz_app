@@ -9,19 +9,24 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
-Route::get('/take-quiz', [QuizController::class, 'take'])->middleware('auth')->name('take-quiz');
+Route::get('/paginate', [DashboardController::class, 'paginate'])->name('paginate-quiz');
 
+Route::middleware('auth')->group(function(){
 Route::prefix('dashboard')->middleware('auth')->group(function () {
-    Route::get('/home', [DashboardController::class, 'dashboard'])->middleware('auth')->name('home');
-    Route::get('/statistics', [DashboardController::class, 'statistics'])->middleware('auth')->name('statistics');
+    Route::get('/home', [DashboardController::class, 'dashboard'])->name('home');
+    Route::get('/statistics', [DashboardController::class, 'statistics'])->name('statistics');
 
-    Route::get('/quizzes', [QuizController::class, 'index'])->middleware('auth')->name('quizzes');
-    Route::get('/quizzes/{quiz}', [QuizController::class, 'edit'])->middleware('auth')->name('edit.quiz');
-    Route::post('/quizzes/{quiz}/update', [QuizController::class, 'update'])->middleware('auth')->name('update.quiz');
-    Route::get('/quizzes/{quiz}/destroy', [QuizController::class, 'destroy'])->middleware('auth')->name('destroy.quiz');
-    Route::get('/create-quiz', [QuizController::class, 'create'])->middleware('auth')->name('create.quiz');
+    Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes');
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'edit'])->name('edit.quiz');
+    Route::post('/quizzes/{quiz}/update', [QuizController::class, 'update'])->name('update.quiz');
+    Route::get('/quizzes/{quiz}/destroy', [QuizController::class, 'destroy'])->name('destroy.quiz');
+    Route::get('/create-quiz', [QuizController::class, 'create'])->name('create.quiz');
 
-    Route::post('/create-quiz', [QuizController::class, 'store'])->middleware('auth')->name('create-quiz');
+    Route::post('/create-quiz', [QuizController::class, 'store'])->name('create-quiz');
+
+});
+    Route::get('/take-quiz/{slug}', [QuizController::class, 'startQuiz'])->name('start-quiz');
+    Route::post('/take-quiz/{slug}', [QuizController::class, 'takeQuiz'])->name('take-quiz');
 
 });
 

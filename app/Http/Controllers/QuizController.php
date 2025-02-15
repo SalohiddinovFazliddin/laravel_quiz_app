@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Quiz;
+use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class QuizController extends Controller
 {
-    /**
+    /**rm -rf ~/.config/JetBrains/PhpStorm* ~/.cache/JetBrains/PhpStorm*
+     *
      * Display a listing of the resource.
      */
     public function index()
     {
         return view('dashboard.quizzes',
-            ['quizzes' => Quiz::withCount('questions')->orderBy('id', 'desc')->get()
+            ['quizzes' => Quiz::withCount('questions')->orderBy('id', 'desc')->paginate(3)
             ]);
     }
 
@@ -122,6 +125,42 @@ class QuizController extends Controller
     {
         $quiz->delete();
         return to_route('quizzes');
+    }
+
+    public function startQuiz(string $slug)
+    {
+        $quiz = Quiz::query()->where('slug', $slug)->with('questions.options')->first();
+        return view('quiz.start-quiz',[
+            'quiz' => $quiz,
+        ]);
+    }
+
+    public function takeQuiz(string $slug, Request $request)
+    {
+        $validator = $request->validate([
+            'answer' => 'required|integer|exists:options,id',
+        ]);
+        $user_id = auth()->id();
+        $quiz = Quiz::where('slug',$slug)->first();
+        $result = Result::where('quiz_id',$quiz->id)->where('user_id',$user_id)->first();
+        if(!$result){
+            $result = Result::create([
+                'quiz_id' => $quiz->id,
+                'user_id' => $user_id,
+                'started_at' => now(),
+            ]);
+            Answer::create([
+                'result_id' => $result->id,
+                'option_id'=> $validator['answer'],
+            ]);
+        }
+        if ($result->finished_at >= now()) {
+            return 'Seni vaqting tugagan yaramas';
+        }
+        Answer::create([
+            'result_id' => $result->id,
+            'option_id'=> $validator['answer'],
+        ]);
     }
 
 }
