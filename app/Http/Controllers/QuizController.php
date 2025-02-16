@@ -17,10 +17,17 @@ class QuizController extends Controller
      */
     public function index()
     {
-        return view('dashboard.quizzes',
-            ['quizzes' => Quiz::withCount('questions')->orderBy('id', 'desc')->paginate(3)
-            ]);
-    }
+        $perPage = request('perPage', 10);
+        $quiz = Quiz::withCount('questions')->where('user_id', auth()->user()->id);
+        if (request()->has('search')) {
+            $quiz->where('title', 'like', '%' . request('search') . '%');
+            ->orWhere('description', 'like', '%' . request('search') . '%');
+        }
+        if (request()->has('sort_by_date')) {
+            $quiz->orderBy('id', 'desc');
+        }
+        $quiz = $quiz->paginate(2);
+        return view('dashboard.quizzes', ['quiz' => $quiz]);}
 
 
     /**
@@ -129,9 +136,15 @@ class QuizController extends Controller
 
     public function startQuiz(string $slug)
     {
-        $quiz = Quiz::query()->where('slug', $slug)->with('questions.options')->first();
+        $quiz = Quiz::query()->where('slug', $slug)->first();
+        $result = Result::create([
+            'quiz_id' => $quiz->id,
+            'user_id' => auth()->id(),
+            'started_at' => now(),
+            'finished_at' => date('Y-m-d H:i:s', strtotime('+' . $quiz->time_limit . ' minutes')),
+        ]);
         return view('quiz.start-quiz',[
-            'quiz' => $quiz,
+            'quiz' => $quiz->load('questions.options'),
         ]);
     }
 

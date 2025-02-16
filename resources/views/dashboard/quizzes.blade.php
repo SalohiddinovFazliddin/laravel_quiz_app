@@ -92,8 +92,8 @@
             </div>
 
         </main>
-        <div class="mt-4 flex justify-center">
-            {{ $quizzes->onEachSide(1)->links('vendor.pagination.simple-tailwind') }}
+        <div class="mt-4 flex items-center flex-col">
+            {{$quizzes->links()}}
         </div>
 
 
