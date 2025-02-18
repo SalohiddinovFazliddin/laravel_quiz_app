@@ -25,7 +25,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::post('/create-quiz', [QuizController::class, 'store'])->name('create-quiz');
 
 });
-    Route::get('/take-quiz/{slug}', [QuizController::class, 'startQuiz'])->name('start-quiz');
+    Route::get('/show-quiz/{slug}', [QuizController::class, 'show'])->name('show-quiz');
+    Route::post('/start-quiz/{slug}', [QuizController::class, 'startQuiz'])->name('start-quiz');
     Route::post('/take-quiz/{slug}', [QuizController::class, 'takeQuiz'])->name('take-quiz');
 
 });

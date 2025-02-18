@@ -1,4 +1,11 @@
-<x-header></x-header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Quiz - Quiz Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
 <body class="flex flex-col min-h-screen bg-gray-100">
 <!-- Navigation -->
 <nav class="bg-white shadow-lg">
@@ -22,17 +29,14 @@
 <!-- Main Content -->
 <main class="flex-grow container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6" id="questionContainer">
-        <form method="POST">
-            @csrf
-
-            <!-- Quiz Header -->
+        <form action="{{ route('take-quiz',[ 'slug'=>$quiz->slug]) }}" method="POST">
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">{{ $quiz->title }}</h1>
                     <p class="text-gray-600 mt-2">{{ $quiz->description }}</p>
                 </div>
                 <div class="text-right">
-                    <div class="text-xl font-bold text-blue-600" id="timer">{{ $quiz->time_limit }}</div>
+                    <div class="text-xl font-bold text-blue-600" id="timer">{{ $quiz->time_limit}}</div>
                     <div class="text-sm text-gray-500">Time Remaining</div>
                 </div>
             </div>
@@ -47,39 +51,40 @@
                     <div class="bg-blue-600 h-2.5 rounded-full" style="width: 10%"></div>
                 </div>
             </div>
-
-            <!-- Question Container -->
-            <div class="mb-8">
-                <div class="mb-4">
-                    <h2 class="text-lg font-semibold text-gray-800" id="question">What is the output of console.log(typeof undefined)?</h2>
-                </div>
-
-                <!-- Options -->
-                <div class="space-y-3" id="options">
-
-
-                </div>
-            </div>
-
-            <!-- Navigation Buttons -->
-            <div class="flex justify-between items-center">
-                <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50">
-                    Previous
-                </button>
-                <button id="next-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Next
-                </button>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="mt-8 text-center">
-                <button id="submit-quiz" class="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                    Submit Quiz
-                </button>
-            </div>
         </form>
-    </div>
 
+
+
+        <!-- Question Container -->
+        <div class="mb-8">
+            <div class="mb-4">
+                <h2 class="text-lg font-semibold text-gray-800" id="question">What is the output of console.log(typeof undefined)?</h2>
+            </div>
+
+            <!-- Options -->
+            <div class="space-y-3" id="options">
+
+
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between items-center">
+            <button type="button" id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50">
+                Previous
+            </button>
+            <button type="button" id="next-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Next
+            </button>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-8 text-center">
+            <button id="submit-quiz" class="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                Submit Quiz
+            </button>
+        </div>
+    </div>
 
     <!-- Results Card -->
     <div id="results-card" class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 hidden">
@@ -116,16 +121,6 @@
 
 <!-- Quiz JavaScript -->
 <script>
-    let startBtn = document.getElementById('start-btn');
-    startBtn.onclick = () => {
-        document.getElementById('start-card').classList.add('hidden');
-        document.getElementById('questionContainer').classList.remove('hidden');
-        let currentQuestion = getQuestion(currentQuestionIndex);
-        displayQuestion(currentQuestion)
-
-    }
-
-    // Timer functionality
     function startTimer(duration, display) {
         let timer = duration;
         setInterval(() => {
@@ -141,27 +136,29 @@
 
     // Initialize quiz
     let options = document.getElementById('options'),
-        questions = JSON.parse(`<?php echo $quiz->toJson()?>`).questions,
-        currenQuestionIndex = 0;
-
+        questions = JSON.parse({{$question}}),
+        currentQuestionIndex = 0;
 
     function getQuestion(index=0) {
         return questions[index];
     }
-    function displayQuestion(question) {
-        let questionElement = document.getElementById('question');
-        optionsElement = document.getElementById('options')
-        questionElement.innerHTML = question.name;
-        optionsElement.innerHTML = '';
-        questions.options.forEach((option)=>{
-           ` <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                <input type="radio" name="answer" class="h-4 w-4 text-blue-600" value="${option.id}">
-                    <span class="ml-3">${option.name}</span>
-            </label>`
-        })
 
+    function  displayQuestion(question){
+        let questionElement = document.getElementById('question'),
+            optionsElement = document.getElementById('options');
+        questionElement.innerText = question.name;
+        optionsElement.innerHTML = '';
+        question.options.forEach((option)=>{
+            optionsElement.innerHTML += `<label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <input type="radio" name="answer" class="h-4 w-4 text-blue-600" value="a">
+                <span class="ml-3">${option.name}</span>
+        </label>`;
+        })
     }
+
     document.addEventListener('DOMContentLoaded', () => {
+        let currentQuestion = getQuestion(currentQuestionIndex)
+        displayQuestion(currentQuestion)
         const timerDisplay = document.getElementById('timer');
         startTimer(1200, timerDisplay); // 20 minutes
 
@@ -170,16 +167,8 @@
             currentQuestionIndex++;
             let question = getQuestion(currentQuestionIndex);
             if (question) {
-                let questionElement = document.getElementById('question');
-                questionElement.textContent = question.question;
-                options.innerHTML = '';
-                question.options.forEach((option) => {
-                    options.innerHTML += `
-                <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                    <input type="radio" name="answer" class="h-4 w-4 text-blue-600" value="${option.id}">
-                    <span class="ml-3">${option.option_text}</span>
-                </label>`
-                });
+                currentQuestionIndex--;
+                displayQuestion(question);
             } else {
                 alert('Quiz completed');
             }
@@ -189,7 +178,24 @@
             currentQuestionIndex--;
             let question = getQuestion(currentQuestionIndex);
             if (question) {
-                let questionElement = document.getElementById('question');
+                displayQuestion(question);
+            } else {
+                currentQuestionIndex++;
+                alert('You are at the first question');
+            }
+        });
+
+        document.getElementById('submit-quiz').addEventListener('click', () => {
+            if (currentQuestionIndex >= 2) {
+                currentQuestionIndex--;
+            }
+            console.log(currentQuestionIndex);
+            console.log(questions[currentQuestionIndex]);
+            questions.splice(currentQuestionIndex, 1);
+            let question = takeQuiz(currentQuestionIndex),
+                questionElement = document.getElementById('question'),
+                questionContainer = document.getElementById('questionContainer');
+            if (question) {
                 questionElement.textContent = question.question;
                 options.innerHTML = '';
                 question.options.forEach((option) => {
@@ -200,11 +206,10 @@
                 </label>`
                 });
             } else {
-                alert('You are at the first question');
+                questionContainer.innerHTML = '';
+                document.getElementById('results-card').classList.remove('hidden');
             }
         });
-
-
     });
 </script>
-<x-footer></x-footer>
+<x-main.footer></x-main.footer>

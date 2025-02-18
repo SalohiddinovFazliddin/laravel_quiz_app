@@ -9,7 +9,6 @@
     <div class="flex-1">
         <!-- Top Navigation -->
        <x-dashboard.navbar></x-dashboard.navbar>
-
         <!-- Content -->
         <main class="p-6">
             <div class="min-h-screen bg-gray-100">
