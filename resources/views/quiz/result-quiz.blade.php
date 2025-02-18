@@ -31,16 +31,16 @@
 
             <div class="flex justify-center space-x-12 mb-8">
                 <div class="text-center">
-                    <p class="text-3xl font-bold text-blue-600" id="final-score">0/10</p>
+                    <p class="text-3xl font-bold text-blue-600" id="final-score">{{$correctOptionCount}}/{{$quiz->question_count}}</p>
                     <p class="text-gray-600">Final Score</p>
                 </div>
                 <div class="text-center">
-                    <p class="text-3xl font-bold text-blue-600" id="time-taken">0:00</p>
+                    <p class="text-3xl font-bold text-blue-600" id="time-taken">{{ $time_taken->h ? $time_taken-> h . ':' . $time_taken->i . ':' . $time_taken->s :  $time_taken->i . ':' . $time_taken->s}}</p>
                     <p class="text-gray-600">Time Taken</p>
                 </div>
             </div>
 
-            <a href="dashboard.html" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <a href="{{ route('home') }}" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                 Return to Dashboard
             </a>
         </div>

@@ -11,12 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('results', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('quiz_id')->constrained('quizzes')->onDelete('cascade');
-            $table->timestamp('started_at');
-            $table->timestamp('finished_at')->nullable();
+        Schema::table('results', function (Blueprint $table) {
             $table->unique(['user_id', 'quiz_id']);
         });
     }
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('results');
+        Schema::table('results', function (Blueprint $table) {
+            //
+        });
     }
 };
